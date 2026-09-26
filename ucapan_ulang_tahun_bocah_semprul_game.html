@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Happy Birthday, Bocah Semprul 💗</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#171225,#30203f,#171225);color:#fff;font-family:Arial,sans-serif;min-height:100vh;overflow-x:hidden}
+.wrap{width:min(850px,92%);margin:auto;padding:28px 0 70px}.hero{text-align:center;padding:55px 10px 35px}
+.kicker{letter-spacing:3px;font-size:11px;opacity:.65}.hero h1{font:700 clamp(48px,12vw,90px)/.9 Georgia;margin:18px 0}.hero p{color:#ddd;line-height:1.7}
+.card{background:#ffffff0d;border:1px solid #ffffff18;border-radius:26px;padding:25px;margin:20px 0;backdrop-filter:blur(12px)}
+h2{font-family:Georgia;margin-top:0}.center{text-align:center}.btn{border:0;border-radius:999px;padding:13px 20px;background:#fff;color:#271b35;font-weight:700;cursor:pointer;margin:6px}.btn:hover{transform:translateY(-2px)}
+#game{height:330px;position:relative;overflow:hidden;border-radius:20px;background:radial-gradient(circle at 50% 20%,#40325d,#161323)}
+.heart{position:absolute;font-size:30px;cursor:pointer;user-select:none;animation:float 1.8s linear forwards}
+@keyframes float{from{transform:translateY(0) rotate(0);opacity:1}to{transform:translateY(-350px) rotate(180deg);opacity:0}}
+.score{font-weight:bold;font-size:18px;margin-bottom:12px}.bar{height:8px;background:#ffffff14;border-radius:9px;overflow:hidden}.fill{height:100%;width:0;background:#f5c8df;transition:.3s}
+.question{font-size:18px;line-height:1.5}.answers{display:grid;gap:10px}.answers button{padding:13px;border:1px solid #ffffff20;border-radius:15px;background:#ffffff0b;color:white;text-align:left;cursor:pointer}
+.answers button:hover{background:#ffffff18}.result{margin-top:15px;font-weight:bold;min-height:24px}
+.hidden{display:none}.letter{line-height:1.85;color:#eee}.big{font:25px Georgia;text-align:center;color:#ffd7e9}
+.badge{display:inline-block;padding:7px 12px;border-radius:99px;background:#ffffff10;font-size:12px}
+#toast{position:fixed;left:50%;bottom:25px;transform:translateX(-50%);background:#fff;color:#24182f;padding:12px 18px;border-radius:999px;font-weight:bold;display:none;z-index:9}
+.confetti{position:fixed;top:-15px;font-size:20px;pointer-events:none;animation:fall 2.5s linear forwards;z-index:8}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+@media(max-width:600px){.card{padding:20px}#game{height:300px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section class="hero">
+<div class="kicker">A LITTLE BIRTHDAY GAME FOR YOU</div>
+<h1>HAPPY<br>BIRTHDAY 🎂</h1>
+<p>Untuk manusia lucu, random, kadang bikin kesel,<br>dan spesialis bilang <b>“ee”</b> + <b>“bocah semprul”</b>.</p>
+<div class="badge">⚠️ Peringatan: terlalu banyak kelucuan di dalam</div>
+</section>
+
+<section class="card center">
+<h2>🎮 Level 1 — Tangkap Hatinya</h2>
+<p>Tangkap <b>10 hati</b> sebelum waktunya habis!</p>
+<div class="score">❤️ <span id="score">0</span>/10 &nbsp; • &nbsp; ⏱️ <span id="time">20</span>s</div>
+<div class="bar"><div class="fill" id="fill"></div></div>
+<div id="game"></div>
+<button class="btn" id="start">Mulai Game</button>
+<div class="result" id="gameResult"></div>
+</section>
+
+<section class="card hidden" id="quiz">
+<h2>🧠 Level 2 — Seberapa Kenal?</h2>
+<p>Jawab pertanyaan ini untuk membuka surat rahasia.</p>
+<div id="qbox"></div>
+<div class="result" id="quizResult"></div>
+</section>
+
+<section class="card hidden" id="letter">
+<div class="center"><span class="badge">🔓 SURAT TERBUKA</span></div>
+<h2>💌 Untuk Bocah Semprul</h2>
+<div class="letter">
+<p>Selamat ulang tahun untuk kamu yang lucu, random, kadang bikin kesel, dan punya bakat khusus membuat suasana jadi nggak pernah benar-benar membosankan.</p>
+<p>Terima kasih untuk semua candaan, semua “ee”, semua panggilan <b>bocah semprul</b>, dan semua momen kecil yang mungkin kelihatannya biasa saja, tapi ternyata berarti.</p>
+<p>Yang paling aku syukuri adalah satu hal: <b>bersama kamu, aku bisa menjadi diriku sendiri.</b> Nggak harus selalu sempurna, nggak harus selalu tahu harus ngomong apa, dan nggak perlu takut merasa dihakimi.</p>
+<p>Semoga umur baru ini membawa banyak hal baik buat kamu. Semoga kamu selalu punya alasan untuk tersenyum, punya keberanian mengejar yang kamu mau, dan dikelilingi orang-orang yang tulus.</p>
+<p class="big">Tetap jadi kamu.<br>Tetap lucu.<br>Tapi tolong... jangan kebanyakan bikin kesel. 😭</p>
+<p class="center"><b>Happy Birthday, bocah semprul. 🎂💗</b></p>
+</div>
+</section>
+
+<section class="card center">
+<h2>🎁 Tombol Terakhir</h2>
+<p>Kalau sudah sampai sini, berarti kamu berhasil melewati semua level.</p>
+<button class="btn" id="final">🎉 Aku siap menerima kejutan</button>
+<p id="finalText" class="big hidden">Semoga hari ini jadi salah satu hari yang kamu ingat dengan senyum. 🤍</p>
+</section>
+</div>
+<div id="toast"></div>
+
+<script>
+const game=document.getElementById('game'),scoreEl=document.getElementById('score'),timeEl=document.getElementById('time'),fill=document.getElementById('fill'),start=document.getElementById('start'),gameResult=document.getElementById('gameResult');
+let score=0,time=20,timer=null,running=false;
+
+function heart(){
+ if(!running)return;
+ const h=document.createElement('span');h.className='heart';h.textContent=['💗','💖','💕','💘'][Math.floor(Math.random()*4)];
+ h.style.left=(Math.random()*88+4)+'%';h.style.top=(Math.random()*75+15)+'%';
+ h.addEventListener('click',()=>{score++;scoreEl.textContent=score;fill.style.width=(score*10)+'%';h.remove();if(score>=10)winGame()},{once:true});
+ game.appendChild(h);setTimeout(()=>h.remove(),1800);
+}
+function winGame(){
+ if(!running)return;running=false;clearInterval(timer);gameResult.textContent='🎉 Level 1 selesai! Kamu berhasil menangkap semuanya!';
+ document.getElementById('quiz').classList.remove('hidden');confetti();setTimeout(()=>document.getElementById('quiz').scrollIntoView({behavior:'smooth'}),500);
+}
+start.addEventListener('click',()=>{
+ if(running)return;score=0;time=20;running=true;scoreEl.textContent=0;timeEl.textContent=time;fill.style.width='0';gameResult.textContent='';start.textContent='Game berjalan...';
+ timer=setInterval(()=>{time--;timeEl.textContent=time;if(time<=0){clearInterval(timer);running=false;start.textContent='Main Lagi';gameResult.textContent='😝 Belum cukup! Coba lagi.'}},1000);
+ const spawn=setInterval(()=>{if(running)heart();else clearInterval(spawn)},650);
+});
+
+const questions=[
+{q:'Kalau dia bilang “ee”, kemungkinan besar...',a:['Sedang jadi manusia paling serius','Sedang random dan bikin ketawa','Sedang tidur','Sedang belajar'],correct:1},
+{q:'Julukan khas yang sering dilempar ke kamu adalah...',a:['Profesor','Bocah semprul','Kapten','Bos besar'],correct:1},
+{q:'Hal yang paling berharga dari hubungan ini adalah...',a:['Harus selalu sempurna','Bisa jadi diri sendiri tanpa takut dihakimi','Menang setiap debat','Tidak pernah berbeda pendapat'],correct:1}
+];
+let qi=0,correct=0;
+function renderQ(){
+ const q=questions[qi],box=document.getElementById('qbox');box.innerHTML='<div class="question"><b>Pertanyaan '+(qi+1)+'/3</b><br>'+q.q+'</div><div class="answers">'+q.a.map((x,i)=>`<button data-i="${i}">${x}</button>`).join('')+'</div>';
+ box.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>answer(+b.dataset.i)));
+}
+function answer(i){
+ if(i===questions[qi].correct){correct++;document.getElementById('quizResult').textContent='💗 Benar!';}
+ else document.getElementById('quizResult').textContent='😜 Salah, tapi tetap lucu.';
+ qi++;
+ if(qi<questions.length)setTimeout(renderQ,500);
+ else setTimeout(()=>{
+   document.getElementById('quizResult').textContent=correct===3?'🏆 Sempurna! Surat rahasia terbuka!':'✨ Kamu tetap lulus karena ulang tahun tidak boleh bikin stres.';
+   document.getElementById('letter').classList.remove('hidden');confetti();
+   setTimeout(()=>document.getElementById('letter').scrollIntoView({behavior:'smooth'}),700);
+ },600);
+}
+renderQ();
+
+function confetti(){
+ for(let i=0;i<70;i++){const x=document.createElement('span');x.className='confetti';x.textContent=['💗','✨','🎉','🎂','💖'][Math.floor(Math.random()*5)];x.style.left=Math.random()*100+'%';x.style.animationDelay=Math.random()*1.2+'s';document.body.appendChild(x);setTimeout(()=>x.remove(),3500)}
+}
+document.getElementById('final').addEventListener('click',()=>{document.getElementById('finalText').classList.remove('hidden');confetti();showToast('🎂 Selamat ulang tahun, bocah semprul!')});
+function showToast(t){const x=document.getElementById('toast');x.textContent=t;x.style.display='block';setTimeout(()=>x.style.display='none',2800)}
+</script>
+</body>
+</html>
